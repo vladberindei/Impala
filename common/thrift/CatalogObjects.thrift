@@ -50,6 +50,7 @@ enum THdfsFileFormat {
   RC_FILE,
   SEQUENCE_FILE,
   AVRO,
+  JSON,
   PARQUET
 }
 

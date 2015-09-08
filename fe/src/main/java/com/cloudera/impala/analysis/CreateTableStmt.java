@@ -15,6 +15,7 @@
 package com.cloudera.impala.analysis;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,7 @@ import org.apache.avro.SchemaParseException;
 import org.apache.hadoop.fs.permission.FsAction;
 
 import com.cloudera.impala.authorization.Privilege;
+import com.cloudera.impala.catalog.HdfsFileFormat;
 import com.cloudera.impala.catalog.HdfsStorageDescriptor;
 import com.cloudera.impala.catalog.RowFormat;
 import com.cloudera.impala.catalog.TableLoadingException;
@@ -99,6 +101,12 @@ public class CreateTableStmt extends StatementBase {
     this.partitionColDefs_ = Lists.newArrayList(partitionColumnDefs);
     this.rowFormat_ = rowFormat;
     this.tableName_ = tableName;
+    if (fileFormat == THdfsFileFormat.JSON) {
+      if (tblProperties == null) {
+        tblProperties = new HashMap<String, String>();
+      }
+      tblProperties.put("is_json", "true");
+    }
     this.tblProperties_ = tblProperties;
     this.serdeProperties_ = serdeProperties;
     unescapeProperties(tblProperties_);

@@ -51,6 +51,10 @@ public enum HdfsFileFormat {
       "org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat",
       "org.apache.hadoop.hive.serde2.avro.AvroSerDe",
       true),
+  JSON("",
+      "",
+      "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe",
+      false),
   PARQUET("org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat",
       "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat",
       "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe",
@@ -94,6 +98,7 @@ public enum HdfsFileFormat {
           .put(PARQUET_LEGACY_INPUT_FORMATS[0], PARQUET)
           .put(PARQUET_LEGACY_INPUT_FORMATS[1], PARQUET)
           .put(PARQUET_LEGACY_INPUT_FORMATS[2], PARQUET)
+          .put(JSON.inputFormat(), JSON)
           .build();
 
   /**
@@ -129,6 +134,7 @@ public enum HdfsFileFormat {
       case SEQUENCE_FILE: return HdfsFileFormat.SEQUENCE_FILE;
       case AVRO: return HdfsFileFormat.AVRO;
       case PARQUET: return HdfsFileFormat.PARQUET;
+      case JSON: return HdfsFileFormat.JSON;
       default:
         throw new RuntimeException("Unknown THdfsFileFormat: "
             + thriftFormat + " - should never happen!");
@@ -142,6 +148,7 @@ public enum HdfsFileFormat {
       case SEQUENCE_FILE: return THdfsFileFormat.SEQUENCE_FILE;
       case AVRO: return THdfsFileFormat.AVRO;
       case PARQUET: return THdfsFileFormat.PARQUET;
+      case JSON: return THdfsFileFormat.JSON;
       default:
         throw new RuntimeException("Unknown HdfsFormat: "
             + this + " - should never happen!");
@@ -164,6 +171,7 @@ public enum HdfsFileFormat {
       case SEQUENCE_FILE: return "SEQUENCEFILE";
       case AVRO: return "AVRO";
       case PARQUET: return "PARQUET";
+      case JSON: return "JSON";
       default:
         throw new RuntimeException("Unknown HdfsFormat: "
             + this + " - should never happen!");
@@ -221,6 +229,8 @@ public enum HdfsFileFormat {
       case AVRO:
         return true;
       case PARQUET:
+        return false;
+      case JSON:
         return false;
       default:
         throw new RuntimeException("Unknown HdfsFormat: "
